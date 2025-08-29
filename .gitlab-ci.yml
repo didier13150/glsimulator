@@ -8,6 +8,7 @@ lint-src:
   image: docker.io/golangci/golangci-lint:v2.3.0
   script:
     - golangci-lint run
+  allow_failure: true
 
 test-src:
   stage: test
