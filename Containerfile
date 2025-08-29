@@ -26,7 +26,6 @@ LABEL eu.tartarefr.glsimulator.version=1.0.0
 
 COPY --from=build build/glsimulator /glsimulator
 COPY LICENSE /LICENSE
-COPY README.fr.md /README.fr.md
 COPY README.md /README.md
 
 ENTRYPOINT [ "/glsimulator" ]
