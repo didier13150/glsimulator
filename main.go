@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"math/rand"
 	"net/http"
@@ -69,8 +68,11 @@ func main() {
 	if len(port) == 0 {
 		port = "8080"
 	}
-	fmt.Println("Listening on port " + port)
-	http.ListenAndServe(":"+port, nil)
+	log.Println("Listening on port " + port)
+	err := http.ListenAndServe(":"+port, nil)
+	if err != nil {
+		log.Fatalln(err)
+	}
 }
 
 func defaultdhandler(w http.ResponseWriter, r *http.Request) {
@@ -188,11 +190,17 @@ func defaultdhandler(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("X-Page", strconv.Itoa(page))
 		w.Header().Set("X-Per-Page", strconv.Itoa(per_page))
 	}
-	w.Write(payload)
+	written, err := w.Write(payload)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	if written == 0 {
+		log.Fatal("No data written")
+	}
 }
 
 func randomString(length int, charset string) string {
-	var seededRand *rand.Rand = rand.New(
+	seededRand := rand.New(
 		rand.NewSource(time.Now().UnixNano()))
 	b := make([]byte, length)
 	for i := range b {
