@@ -141,6 +141,13 @@ func defaultdhandler(w http.ResponseWriter, r *http.Request) {
 		default:
 			payload = []byte(`{"error":"404 Not Found"}`)
 		}
+	} else if len(path) >= 14 && path[:14] == "/api/v4/groups" {
+		vars := generateVarList()
+		total = len(vars)
+		payload, err = json.Marshal(vars)
+		if err != nil {
+			log.Println(err)
+		}
 	} else {
 		payload = []byte(`{"error":"404 Not Found"}`)
 	}
